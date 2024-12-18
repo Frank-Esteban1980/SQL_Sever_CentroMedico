@@ -1,0 +1,50 @@
+SELECT * FROM Paciente1 go
+-------------
+--Para crear un SP se usa la sentencia CREATE PROCEDURE O CREATE PROC nombreproceso
+--Una vez creado si se quiere volvera a usar se usa ALTER PRCO nombre
+------------
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE ALTA_Paciente(
+
+	-- Add the parameters for the stored procedure here
+	@DNI varchar(20),
+	@nombre varchar(50),
+	@apellido varchar(50),
+	@fNaciiento varchar(8),
+	@domicilio varchar (50),
+	@idPais char(3),
+	@telefono varchar(20)='',
+	@email varchar(20),
+	@observacion varchar(1000)='',
+	@fAlta varchar(8)=''
+)
+
+AS
+
+IF NOT EXISTS(SELECT * FROM Paciente1 WHERE DNI = @DNI)
+BEGIN
+	INSERT INTO Paciente1 (DNI, nombre, apellido, fNaciiento, domicilio, idPais, telefono, email, observacion, fAlta)
+	VALUES (@DNI, @nombre, @apellido, @fNaciiento, @domicilio, @idPais, @telefono, @email, @observacion,@fAlta)
+	
+	PRINT 'El paciente se agregó correctamente'
+	return
+END
+ELSE
+BEGIN
+	PRINT 'El paciente ya existe'
+	return
+END
+GO
+
+EXEC ALTA_Paciente '232315555','Alberto','Falero', '19871201','Cañaveral','MEX','','alfale@hotmail.com', ''
+EXEC ALTA_Paciente '11111111','Triguer','Triguer', '19800902','Acapulco','MEX','','acapulco@hotmail.com', ''
+EXEC ALTA_Paciente '00000000','notri','no tri', '19800902','Quito','ECU','','quito@hotmail.com', ''
+EXEC ALTA_Paciente '33333333','Adrian','Perez', '19901102','Jerez','ESP','','Esperando', ''
+EXEC ALTA_Paciente '4444444','Brandol','Muñoz', '199401102','London','COL','915252525','', '20201111'
+EXEC ALTA_Paciente '4446666','Inés María','Lozada', '19580410','Madrid','ESP','913021315','', '20201111'
+EXEC ALTA_Paciente '1116666','Inés María','Lozada', '19580410','Madrid','ESP','913021315','', '20201111'
